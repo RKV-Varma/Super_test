@@ -6,4 +6,4 @@ if api_key:
 else:
     print("API Key not found in environment variables.")
 
-print('Hello')
+print('Hello World')
