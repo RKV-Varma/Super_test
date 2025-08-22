@@ -21,7 +21,7 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Run repository validation script
-        run: python scripts/validate_repo.py
+        run: python validate_repo.py
 
   run-main:
     name: Run Main Script   # Another named check you can require
