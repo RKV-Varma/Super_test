@@ -1,19 +1,27 @@
-    name: My Python Workflow
+name: My Python Workflow
 
-    on: [push]
+on: [push]
 
-    jobs:
-      build:
-        runs-on: ubuntu-latest
-        steps:
-        - uses: actions/checkout@v4
-        - name: Set up Python
-          uses: actions/setup-python@v5
-          with:
-            python-version: '3.x'
-        - name: Install dependencies
-          run: pip install -r requirements.txt
-        - name: Run Python script with secret
-          env:
-            MY_API_KEY: ${{ secrets.CLOUD_PASS_KEY }}
-          run: python main.py
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      # --- ADD VALIDATION STEP ---
+      - name: Validate repo structure and naming
+        run: python scripts/validate_repo.py
+
+      # --- RUN YOUR MAIN SCRIPT ---
+      - name: Run Python script with secret
+        env:
+          MY_API_KEY: ${{ secrets.CLOUD_PASS_KEY }}
+        run: python main.py
