@@ -1,9 +1,13 @@
 name: My Python Workflow
 
-on: [push]
+on:
+  push:
+    branches:
+      - main  # Only run on pushes to main branch
 
 jobs:
-  build:
+  validate:
+    name: Repo Validation Check   # This is the name you’ll select in branch protection
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -16,11 +20,24 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      # --- ADD VALIDATION STEP ---
-      - name: Validate repo structure and naming
+      - name: Run repository validation script
         run: python scripts/validate_repo.py
 
-      # --- RUN YOUR MAIN SCRIPT ---
+  run-main:
+    name: Run Main Script   # Another named check you can require
+    runs-on: ubuntu-latest
+    needs: validate   # Only runs if validation passes
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
       - name: Run Python script with secret
         env:
           MY_API_KEY: ${{ secrets.CLOUD_PASS_KEY }}
