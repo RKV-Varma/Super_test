@@ -8,13 +8,16 @@ REQUIRED_DIRS = ["src", "tests"]
 REQUIRED_HEADER = "# Project"  # line that must appear in README.md
 REPO_NAME_PATTERN = r"^[a-z0-9\-_]+$"  # lowercase, numbers, hyphen/underscore only
 
+
 def check_required_files():
     missing = [f for f in REQUIRED_FILES if not os.path.isfile(f)]
     return missing
 
+
 def check_required_dirs():
     missing = [d for d in REQUIRED_DIRS if not os.path.isdir(d)]
     return missing
+
 
 def check_readme_header():
     if not os.path.isfile("README.md"):
@@ -23,11 +26,13 @@ def check_readme_header():
         content = f.read()
     return REQUIRED_HEADER in content
 
+
 def check_repo_name():
     # GitHub Actions exposes the repo name in GITHUB_REPOSITORY (owner/repo)
     repo = os.environ.get("GITHUB_REPOSITORY", "")
     repo_name = repo.split("/")[-1]
     return re.match(REPO_NAME_PATTERN, repo_name) is not None
+
 
 def main():
     errors = []
@@ -54,6 +59,7 @@ def main():
     else:
         print("Repository validation passed.")
         sys.exit(0)
+
 
 if __name__ == "__main__":
     main()
